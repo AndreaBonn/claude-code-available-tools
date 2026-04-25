@@ -1,0 +1,28 @@
+{
+  "mcpServers": {
+    "global-legacy-server": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["server.js"]
+    }
+  },
+  "projects": {
+    "/home/user/project-a": {
+      "mcpServers": {
+        "project-a-server": {
+          "type": "http",
+          "url": "https://project-a.example.com/mcp"
+        }
+      }
+    },
+    "/home/user/project-b": {
+      "mcpServers": {
+        "project-b-server": {
+          "type": "stdio",
+          "command": "python",
+          "args": ["-m", "mcp_server"]
+        }
+      }
+    }
+  }
+}

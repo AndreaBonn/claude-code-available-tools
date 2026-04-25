@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "project-mcp": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["project-server"]
+    }
+  }
+}

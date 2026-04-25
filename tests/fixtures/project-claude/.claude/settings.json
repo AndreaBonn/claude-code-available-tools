@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "local-db": {
+      "type": "stdio",
+      "command": "pg-mcp",
+      "args": ["--port", "5432"]
+    }
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {"type": "command", "command": "./hooks/pre-write.sh"}
+        ]
+      }
+    ]
+  }
+}
