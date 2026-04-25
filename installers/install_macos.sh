@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install_macos.sh — One-shot installer for ctools on macOS
+# install_macos.sh — One-shot installer for cctools on macOS
 # Usage: ./install_macos.sh [--force]
 
 set -euo pipefail
@@ -58,8 +58,8 @@ if [[ "$PY_MAJOR" -lt 3 ]] || { [[ "$PY_MAJOR" -eq 3 ]] && [[ "$PY_MINOR" -lt 10
 fi
 ok "Python $PY_VERSION ($PYTHON_CMD)"
 
-# --- Step 2: Install ctools ---
-info "Installing ctools..."
+# --- Step 2: Install cctools ---
+info "Installing cctools..."
 
 if command -v pipx &>/dev/null; then
     info "Using pipx..."
@@ -76,9 +76,9 @@ else
 fi
 
 # --- Step 3: Check PATH ---
-CTOOLS_BIN=$(command -v ctools 2>/dev/null || true)
+CTOOLS_BIN=$(command -v cctools 2>/dev/null || true)
 if [[ -z "$CTOOLS_BIN" ]]; then
-    warn "ctools not found on PATH."
+    warn "cctools not found on PATH."
     # macOS: pipx/uv install to ~/Library/... or ~/.local/bin
     warn "Try adding one of these to your shell profile (~/.zshrc):"
     echo ""
@@ -88,7 +88,7 @@ if [[ -z "$CTOOLS_BIN" ]]; then
     echo ""
     warn "Then restart your shell and re-run this script."
 else
-    ok "ctools binary: $CTOOLS_BIN"
+    ok "cctools binary: $CTOOLS_BIN"
 fi
 
 # --- Step 4: Install slash command ---
@@ -112,25 +112,25 @@ fi
 
 # --- Step 5: Smoke test ---
 info "Running smoke test..."
-if command -v ctools &>/dev/null; then
-    RESOURCE_COUNT=$(ctools --mode inline 2>/dev/null | grep -c "●\|◆" || echo "0")
+if command -v cctools &>/dev/null; then
+    RESOURCE_COUNT=$(cctools --mode inline 2>/dev/null | grep -c "●\|◆" || echo "0")
     ok "Smoke test passed — $RESOURCE_COUNT resources found"
 else
-    warn "Cannot run smoke test (ctools not on PATH yet)"
+    warn "Cannot run smoke test (cctools not on PATH yet)"
 fi
 
 # --- Recap ---
 echo ""
 echo -e "${BOLD}${GREEN}═══════════════════════════════════════${NC}"
-echo -e "${BOLD}  ctools installation complete! (macOS)${NC}"
+echo -e "${BOLD}  cctools installation complete! (macOS)${NC}"
 echo -e "${BOLD}${GREEN}═══════════════════════════════════════${NC}"
 echo ""
-echo -e "  Binary:         ${CYAN}${CTOOLS_BIN:-~/.local/bin/ctools}${NC}"
+echo -e "  Binary:         ${CYAN}${CTOOLS_BIN:-~/.local/bin/cctools}${NC}"
 echo -e "  Slash command:  ${CYAN}$SLASH_CMD_DST${NC}"
 echo ""
 echo -e "  ${BOLD}Usage:${NC}"
-echo -e "    ${CYAN}ctools${NC}                 — TUI in current terminal"
-echo -e "    ${CYAN}ctools --mode inline${NC}   — text report"
+echo -e "    ${CYAN}cctools${NC}                 — TUI in current terminal"
+echo -e "    ${CYAN}cctools --mode inline${NC}   — text report"
 echo -e "    ${CYAN}/tools${NC}                 — from Claude Code (opens Terminal.app)"
 echo -e "    ${CYAN}/tools inline${NC}          — from Claude Code (inline report)"
 echo ""

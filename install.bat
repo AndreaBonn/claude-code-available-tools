@@ -1,5 +1,5 @@
 @echo off
-REM install.bat — Windows launcher for ctools installer
+REM install.bat — Windows launcher for cctools installer
 REM Delegates to install_windows.ps1
 
 echo Detected: Windows

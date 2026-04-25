@@ -1,10 +1,10 @@
-"""Smoke tests for ctools.tui — verifies widget composition."""
+"""Smoke tests for cctools.tui — verifies widget composition."""
 
 from __future__ import annotations
 
 import pytest
 
-from ctools.tui import CtoolsApp, DetailPanel, SidebarTree
+from cctools.tui import CtoolsApp, DetailPanel, SidebarTree
 
 
 class TestTuiComposition:

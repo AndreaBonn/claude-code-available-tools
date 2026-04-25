@@ -1,4 +1,4 @@
-# install_windows.ps1 — One-shot installer for ctools on Windows
+# install_windows.ps1 — One-shot installer for cctools on Windows
 # Usage: powershell -ExecutionPolicy Bypass -File install_windows.ps1 [-Force]
 #
 # Requirements: Python 3.10+, Claude Code installed
@@ -53,8 +53,8 @@ if ($PyMajor -lt 3 -or ($PyMajor -eq 3 -and $PyMinor -lt 10)) {
 }
 Write-Ok "Python $PyVersion ($PythonCmd)"
 
-# --- Step 2: Install ctools ---
-Write-Info "Installing ctools..."
+# --- Step 2: Install cctools ---
+Write-Info "Installing cctools..."
 
 $Installed = $false
 
@@ -88,10 +88,10 @@ if (-not $Installed) {
 # --- Step 3: Check PATH ---
 $CtoolsBin = $null
 try {
-    $CtoolsBin = (Get-Command ctools -ErrorAction Stop).Source
-    Write-Ok "ctools binary: $CtoolsBin"
+    $CtoolsBin = (Get-Command cctools -ErrorAction Stop).Source
+    Write-Ok "cctools binary: $CtoolsBin"
 } catch {
-    Write-Warn "ctools not found on PATH."
+    Write-Warn "cctools not found on PATH."
     $PythonScriptsDir = & $PythonCmd -c "import sysconfig; print(sysconfig.get_path('scripts', 'nt_user'))" 2>&1
     Write-Warn "Add this directory to your PATH:"
     Write-Host ""
@@ -128,31 +128,31 @@ if ($DoInstall) {
 # --- Step 5: Smoke test ---
 Write-Info "Running smoke test..."
 try {
-    $null = Get-Command ctools -ErrorAction Stop
-    $output = & ctools --mode inline 2>&1
+    $null = Get-Command cctools -ErrorAction Stop
+    $output = & cctools --mode inline 2>&1
     $count = ($output | Select-String -Pattern "[●◆]" -AllMatches | ForEach-Object { $_.Matches.Count } | Measure-Object -Sum).Sum
     if (-not $count) { $count = 0 }
     Write-Ok "Smoke test passed — $count resources found"
 } catch {
-    Write-Warn "Cannot run smoke test (ctools not on PATH yet)"
+    Write-Warn "Cannot run smoke test (cctools not on PATH yet)"
 }
 
 # --- Recap ---
 Write-Host ""
 Write-Host "=======================================" -ForegroundColor Green
-Write-Host "  ctools installation complete! (Windows)" -ForegroundColor White
+Write-Host "  cctools installation complete! (Windows)" -ForegroundColor White
 Write-Host "=======================================" -ForegroundColor Green
 Write-Host ""
-$BinPath = if ($CtoolsBin) { $CtoolsBin } else { "~\AppData\Roaming\Python\Scripts\ctools.exe" }
+$BinPath = if ($CtoolsBin) { $CtoolsBin } else { "~\AppData\Roaming\Python\Scripts\cctools.exe" }
 Write-Host "  Binary:         $BinPath" -ForegroundColor Cyan
 Write-Host "  Slash command:  $SlashCmdDst" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Usage:" -ForegroundColor White
-Write-Host "    ctools                 — TUI in current terminal" -ForegroundColor Cyan
-Write-Host "    ctools --mode inline   — text report" -ForegroundColor Cyan
+Write-Host "    cctools                 — TUI in current terminal" -ForegroundColor Cyan
+Write-Host "    cctools --mode inline   — text report" -ForegroundColor Cyan
 Write-Host "    /tools                 — from Claude Code" -ForegroundColor Cyan
 Write-Host "    /tools inline          — from Claude Code (inline report)" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "  Note: external mode is not available on Windows." -ForegroundColor Yellow
-Write-Host "  Use 'ctools' or '/tools tui' for TUI, '/tools inline' for text." -ForegroundColor Yellow
+Write-Host "  Use 'cctools' or '/tools tui' for TUI, '/tools inline' for text." -ForegroundColor Yellow
 Write-Host ""

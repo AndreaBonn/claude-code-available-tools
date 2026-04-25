@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — Universal installer dispatcher for ctools
+# install.sh — Universal installer dispatcher for cctools
 # Detects the OS and launches the appropriate platform installer.
 #
 # Usage: ./install.sh [--force]

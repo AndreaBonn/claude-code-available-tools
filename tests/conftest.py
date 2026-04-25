@@ -1,4 +1,4 @@
-"""Shared fixtures for the ctools test suite."""
+"""Shared fixtures for the cctools test suite."""
 
 from __future__ import annotations
 

@@ -1,8 +1,8 @@
-"""Tests for ctools.terminal — emulator detection."""
+"""Tests for cctools.terminal — emulator detection."""
 
 from __future__ import annotations
 
-from ctools.terminal import find_terminal_emulator
+from cctools.terminal import find_terminal_emulator
 
 
 class TestFindTerminalEmulator:

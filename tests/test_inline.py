@@ -1,4 +1,4 @@
-"""Tests for ctools.inline — text report renderer."""
+"""Tests for cctools.inline — text report renderer."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from ctools.inline import render
-from ctools.scanner import Resource, scan_all
+from cctools.inline import render
+from cctools.scanner import Resource, scan_all
 
 FIXTURES = Path(__file__).parent / "fixtures"
 HOME_CLAUDE = FIXTURES / "home-claude"

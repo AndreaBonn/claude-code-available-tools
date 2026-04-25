@@ -7,6 +7,34 @@ resolution-markers = [
 ]
 
 [[package]]
+name = "cctools"
+version = "1.0.0"
+source = { editable = "." }
+dependencies = [
+    { name = "rich" },
+    { name = "textual" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "ruff" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "mypy", marker = "extra == 'dev'" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
+    { name = "pytest-cov", marker = "extra == 'dev'" },
+    { name = "rich", specifier = ">=13.7.0" },
+    { name = "ruff", marker = "extra == 'dev'" },
+    { name = "textual", specifier = ">=0.80.0" },
+]
+provides-extras = ["dev"]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 source = { registry = "https://pypi.org/simple" }
@@ -132,34 +160,6 @@ wheels = [
 toml = [
     { name = "tomli", marker = "python_full_version <= '3.11'" },
 ]
-
-[[package]]
-name = "ctools"
-version = "1.0.0"
-source = { editable = "." }
-dependencies = [
-    { name = "rich" },
-    { name = "textual" },
-]
-
-[package.optional-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "mypy", marker = "extra == 'dev'" },
-    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
-    { name = "pytest-cov", marker = "extra == 'dev'" },
-    { name = "rich", specifier = ">=13.7.0" },
-    { name = "ruff", marker = "extra == 'dev'" },
-    { name = "textual", specifier = ">=0.80.0" },
-]
-provides-extras = ["dev"]
 
 [[package]]
 name = "exceptiongroup"

@@ -1,4 +1,4 @@
-"""Tests for ctools.scanner — the core resource discovery engine."""
+"""Tests for cctools.scanner — the core resource discovery engine."""
 
 from __future__ import annotations
 
@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from ctools.scanner import (
+from cctools.scanner import (
     Resource,
     _scan_claude_json_legacy,
     _scan_hooks,

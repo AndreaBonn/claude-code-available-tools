@@ -1,8 +1,8 @@
-"""Tests for ctools.cli — argument parsing and mode dispatch."""
+"""Tests for cctools.cli — argument parsing and mode dispatch."""
 
 from __future__ import annotations
 
-from ctools.cli import _parse_args, _should_use_tui
+from cctools.cli import _parse_args, _should_use_tui
 
 
 class TestParseArgs:
