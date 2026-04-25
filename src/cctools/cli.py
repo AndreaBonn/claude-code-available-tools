@@ -8,7 +8,7 @@ import os
 import subprocess
 import sys
 
-from cctools import inline, terminal
+from cctools import __version__, inline, terminal
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,11 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="cctools",
         description="Interactive explorer for Claude Code tools and configuration.",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
     )
     parser.add_argument(
         "--mode",
