@@ -13,3 +13,4 @@ htmlcov/
 coverage.json
 coverage.xml
 doc_progetto/
+.claude/settings.local.json

@@ -126,11 +126,9 @@ class CtoolsApp(App[int]):
     def __init__(
         self,
         filter_term: str = "",
-        from_slash: bool = False,
     ) -> None:
         super().__init__()
         self._initial_filter = filter_term
-        self._from_slash = from_slash
         self._resources: list[Resource] = []
         self._node_to_resource: dict[int, Resource] = {}
         self._filter_term: str = filter_term
@@ -289,13 +287,13 @@ def run(filter_term: str = "", from_slash: bool = False) -> int:
     filter_term : str
         Initial filter term.
     from_slash : bool
-        Whether launched from /tools slash command.
+        Accepted for API compatibility with inline.run() but unused in TUI.
 
     Returns
     -------
     int
         Exit code.
     """
-    app = CtoolsApp(filter_term=filter_term, from_slash=from_slash)
+    app = CtoolsApp(filter_term=filter_term)
     app.run()
     return 0

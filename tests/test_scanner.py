@@ -87,7 +87,10 @@ class TestParseFrontmatter:
 
     def test_multiline_folded_strip(self):
         """YAML ``>-`` should also work (strip trailing newline variant)."""
-        text = "---\nname: test\ndescription: >-\n  Folded text\n  continues here\nmodel: sonnet\n---\n"
+        text = (
+            "---\nname: test\ndescription: >-\n"
+            "  Folded text\n  continues here\nmodel: sonnet\n---\n"
+        )
         meta, body = parse_frontmatter(text)
         assert meta["description"] == "Folded text continues here"
         assert meta["model"] == "sonnet"
