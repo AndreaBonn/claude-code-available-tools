@@ -1,8 +1,8 @@
 ---
 name: tools
 description: Open the Claude Code tools explorer (cctools). Shows all configured slash commands, subagents, skills, MCP servers, hooks, and env variables from ~/.claude and the current project.
-argument-hint: [external|tui|inline] [filter_term]
-allowed-tools: Bash(cctools:*)
+argument-hint: "[external|tui|inline] [filter_term]"
+allowed-tools: "Bash(cctools:*)"
 ---
 
 Open the cctools explorer based on the argument provided.
