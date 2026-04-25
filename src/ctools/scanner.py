@@ -115,19 +115,55 @@ def parse_frontmatter(text: str) -> tuple[dict[str, str], str]:
         return {}, text
 
     meta: dict[str, str] = {}
+    current_key: str | None = None
+    multiline_parts: list[str] = []
+    is_folded = False  # True for >, False for |
+
+    def _flush() -> None:
+        """Save accumulated multiline value to meta."""
+        if current_key is not None and multiline_parts:
+            if is_folded:
+                meta[current_key] = " ".join(multiline_parts)
+            else:
+                meta[current_key] = "\n".join(multiline_parts)
+
     for line in lines[1:end_idx]:
         stripped = line.strip()
+
+        # Continuation line for multiline value (indented)
+        if current_key is not None and line and line[0] in (" ", "\t") and stripped:
+            multiline_parts.append(stripped)
+            continue
+
+        # Not a continuation — flush previous multiline if any
+        _flush()
+        current_key = None
+        multiline_parts = []
+
         if not stripped or stripped.startswith("#"):
             continue
+
         colon_pos = stripped.find(":")
         if colon_pos == -1:
             continue
+
         key = stripped[:colon_pos].strip()
         value = stripped[colon_pos + 1 :].strip()
+
+        # YAML multiline indicators: > (folded) or | (literal)
+        if value in (">", "|", ">-", "|-"):
+            current_key = key
+            is_folded = value.startswith(">")
+            multiline_parts = []
+            continue
+
         # Strip surrounding quotes
         if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
             value = value[1:-1]
         meta[key] = value
+
+    # Flush any trailing multiline value
+    _flush()
 
     body = "\n".join(lines[end_idx + 1 :])
     return meta, body

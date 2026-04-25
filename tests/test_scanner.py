@@ -69,6 +69,26 @@ class TestParseFrontmatter:
         assert meta["name"] == "git:commit"
         assert meta["description"] == "Run git commit: with message"
 
+    def test_multiline_folded(self):
+        """YAML ``>`` folds lines into a single string with spaces."""
+        text = "---\nname: test\ndescription: >\n  Line one\n  line two\n  line three\n---\nBody"
+        meta, body = parse_frontmatter(text)
+        assert meta["name"] == "test"
+        assert meta["description"] == "Line one line two line three"
+
+    def test_multiline_literal(self):
+        """YAML ``|`` preserves newlines."""
+        text = "---\nname: test\ndescription: |\n  Line one\n  line two\n---\nBody"
+        meta, body = parse_frontmatter(text)
+        assert meta["description"] == "Line one\nline two"
+
+    def test_multiline_folded_strip(self):
+        """YAML ``>-`` should also work (strip trailing newline variant)."""
+        text = "---\nname: test\ndescription: >-\n  Folded text\n  continues here\nmodel: sonnet\n---\n"
+        meta, body = parse_frontmatter(text)
+        assert meta["description"] == "Folded text continues here"
+        assert meta["model"] == "sonnet"
+
     def test_empty_string(self):
         meta, body = parse_frontmatter("")
         assert meta == {}
