@@ -38,6 +38,10 @@ def find_terminal_emulator() -> tuple[list[str], str] | None:
                 return argv, name
 
     # 3. macOS: use osascript + Terminal.app
+    # NOTE: The command appended to this argv_prefix is built entirely from
+    # internal constants in cli.py (["cctools", "--mode", "tui", ...]).
+    # Do NOT pass user-supplied strings through this osascript path without
+    # proper escaping — AppleScript concatenation is injection-prone.
     if platform.system() == "Darwin":
         if shutil.which("osascript"):
             return (
