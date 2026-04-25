@@ -237,7 +237,9 @@ def _scan_markdown_dir(
         name = meta.get("name") or _name_from_path(base_dir, md_path)
         description = meta.get("description") or _description_from_body(body)
 
-        extra = {k: v for k, v in meta.items() if k not in ("name", "description")}
+        extra: dict[str, object] = {
+            k: v for k, v in meta.items() if k not in ("name", "description")
+        }
 
         resources.append(
             Resource(
@@ -274,7 +276,9 @@ def _scan_skills(base_dir: Path, scope: str) -> list[Resource]:
         meta, body = parse_frontmatter(text)
         name = meta.get("name") or skill_dir.name
         description = meta.get("description") or _description_from_body(body)
-        extra = {k: v for k, v in meta.items() if k not in ("name", "description")}
+        extra: dict[str, object] = {
+            k: v for k, v in meta.items() if k not in ("name", "description")
+        }
 
         resources.append(
             Resource(

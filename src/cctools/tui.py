@@ -156,9 +156,9 @@ class CtoolsApp(App[int]):
         detail.show_legend()
 
         self._do_refresh()
-        self.set_interval(interval=3.0, callback=self._auto_refresh)
+        self.set_interval(interval=3.0, callback=self._periodic_refresh)
 
-    def _auto_refresh(self) -> None:
+    def _periodic_refresh(self) -> None:
         """Periodic refresh callback."""
         self._do_refresh()
 
