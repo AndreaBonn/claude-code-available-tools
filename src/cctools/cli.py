@@ -77,6 +77,8 @@ def _launch_external(args: argparse.Namespace) -> int:
 
     logger.info("Launching %s: %s", name, full_cmd)
     try:
+        # S603: full_cmd is built entirely from internal constants and
+        # terminal.find_terminal_emulator() — no user-supplied input.
         subprocess.Popen(full_cmd)  # noqa: S603
         print(f"Opened cctools in {name}.")
     except OSError as exc:
