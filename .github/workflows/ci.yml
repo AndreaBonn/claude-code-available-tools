@@ -110,4 +110,6 @@ jobs:
         run: uv sync --dev
 
       - name: Dependency audit
-        run: uv run pip-audit --skip-editable
+        # CVE-2026-3219: vulnerability in pip itself (transitive dep of pip-audit,
+        # not a runtime dependency of cctools). Remove --ignore-vuln when pip > 26.0.1 ships the fix.
+        run: uv run pip-audit --skip-editable --ignore-vuln CVE-2026-3219
