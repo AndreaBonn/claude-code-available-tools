@@ -29,6 +29,6 @@ fi
 ```
 
 If `cctools` is not found on PATH, tell the user to run the installer:
-`cd ~/cctools-project && ./install.sh` or install with `pip install .` from the cctools repo.
+`cd <repo-dir> && ./install.sh` or install with `pip install .` from the cc-available-tools repo.
 
 If mode is `external` and the command reports "no terminal emulator found", suggest retrying with `/tools tui` or `/tools inline`.

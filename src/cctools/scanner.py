@@ -355,13 +355,15 @@ def _scan_hooks(
                     continue
                 htype = hook_def.get("type", "command")
                 hcmd = hook_def.get("command", "")
+                hdesc = hook_def.get("description", "")
+                desc = hdesc if hdesc else f"[{htype}] {hcmd}"
                 resources.append(
                     Resource(
                         category="hooks",
                         name=f"{event}:{matcher}",
                         scope=scope,
                         source=source,
-                        description=f"[{htype}] {hcmd}"[:240],
+                        description=desc[:240],
                         extra=dict(hook_def),
                     )
                 )
