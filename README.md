@@ -1,6 +1,6 @@
 **English** | [Italiano](README.it.md)
 
-# cc-available-tools
+# Claude Code Available Tools by Bonn
 
 Interactive explorer for Claude Code tools and configuration. Scans and displays slash commands, subagents, skills, MCP servers, hooks, and environment variables from both global (`~/.claude/`) and project-level (`.claude/`) configurations.
 
@@ -28,7 +28,7 @@ Requires Python 3.10+ and one of: pipx, uv, or pip.
 ```bash
 # Clone the repository
 git clone https://github.com/AndreaBonn/claude-code-available-tools.git
-cd cc-available-tools
+cd claude-code-available-tools
 
 # Run the universal installer (auto-detects OS)
 ./install.sh

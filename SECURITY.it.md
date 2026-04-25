@@ -31,7 +31,7 @@ Non aprire una issue pubblica per segnalazioni di sicurezza.
 
 ## Misure di sicurezza implementate
 
-cc-available-tools è un tool CLI locale che legge i file di configurazione Claude Code dal disco. Non espone servizi di rete, non gestisce autenticazione e non elabora input utente non fidato da fonti esterne.
+Claude Code Available Tools by Bonn è un tool CLI locale che legge i file di configurazione Claude Code dal disco. Non espone servizi di rete, non gestisce autenticazione e non elabora input utente non fidato da fonti esterne.
 
 Misure attuali:
 
@@ -50,7 +50,7 @@ Misure attuali:
 
 ## Fuori ambito
 
-I seguenti casi non sono considerati vulnerabilità in cc-available-tools:
+I seguenti casi non sono considerati vulnerabilità in Claude Code Available Tools by Bonn:
 
 - Visualizzazione di dati sensibili già presenti nei file di configurazione Claude Code (questa è la funzione prevista del tool)
 - Escalation di privilegi locali che richiedono accesso preesistente all'account dell'utente

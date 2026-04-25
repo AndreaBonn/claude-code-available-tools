@@ -1,4 +1,4 @@
-# Contributing to cc-available-tools
+# Contributing to Claude Code Available Tools by Bonn
 
 Contributions are welcome via pull request.
 
@@ -6,7 +6,7 @@ Contributions are welcome via pull request.
 
 ```bash
 git clone https://github.com/AndreaBonn/claude-code-available-tools.git
-cd cc-available-tools
+cd claude-code-available-tools
 uv sync --dev
 ```
 
