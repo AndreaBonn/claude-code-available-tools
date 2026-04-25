@@ -4,7 +4,12 @@
 
 Interactive explorer for Claude Code tools and configuration. Scans and displays slash commands, subagents, skills, MCP servers, hooks, and environment variables from both global (`~/.claude/`) and project-level (`.claude/`) configurations.
 
+[![CI](https://github.com/AndreaBonn/claude-code-available-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/AndreaBonn/claude-code-available-tools/actions/workflows/ci.yml)
+[![Tests](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/AndreaBonn/claude-code-available-tools/main/badges/test-badge.json)](https://github.com/AndreaBonn/claude-code-available-tools/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/AndreaBonn/claude-code-available-tools/main/badges/coverage-badge.json)](https://github.com/AndreaBonn/claude-code-available-tools/actions/workflows/ci.yml)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Security Policy](https://img.shields.io/badge/Security-Policy-blueviolet.svg)](SECURITY.md)
 
 ## Features
 

@@ -12,5 +12,7 @@ htmlcov/
 .coverage
 coverage.json
 coverage.xml
+coverage/
+test-results.xml
 doc_progetto/
 .claude/settings.local.json
