@@ -132,3 +132,32 @@ class TestRender:
         plain = output.plain
         assert "Total:" in plain
         assert "Slash Commands" in plain
+
+    def test_render_without_resources_calls_scan_all(self, monkeypatch: pytest.MonkeyPatch):
+        monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(HOME_CLAUDE))
+        output = render(resources=None, project_dir=PROJECT_CLAUDE)
+        plain = output.plain
+        assert "Total:" in plain
+
+
+class TestRun:
+    def test_run_returns_zero(self, monkeypatch: pytest.MonkeyPatch):
+        from cctools.inline import run
+
+        monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(HOME_CLAUDE))
+        result = run(project_dir=PROJECT_CLAUDE)
+        assert result == 0
+
+    def test_run_with_from_slash(self, monkeypatch: pytest.MonkeyPatch):
+        from cctools.inline import run
+
+        monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(HOME_CLAUDE))
+        result = run(from_slash=True, project_dir=PROJECT_CLAUDE)
+        assert result == 0
+
+    def test_run_with_filter(self, monkeypatch: pytest.MonkeyPatch):
+        from cctools.inline import run
+
+        monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(HOME_CLAUDE))
+        result = run(filter_term="mcp", project_dir=PROJECT_CLAUDE)
+        assert result == 0

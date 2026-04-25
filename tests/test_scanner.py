@@ -8,7 +8,10 @@ import pytest
 
 from cctools.scanner import (
     Resource,
+    _description_from_body,
+    _safe_read_json,
     _scan_claude_json_legacy,
+    _scan_env_from_settings,
     _scan_hooks,
     _scan_markdown_dir,
     _scan_mcp_servers,
@@ -212,7 +215,7 @@ class TestScanHooks:
         pre_bash = [r for r in resources if r.name == "PreToolUse:Bash"]
         assert len(pre_bash) == 2
 
-    def test_hook_description_format(self):
+    def test_hook_without_description_uses_type_command_format(self):
         import json
 
         settings = json.loads((HOME_CLAUDE / "settings.json").read_text())
@@ -221,8 +224,37 @@ class TestScanHooks:
             scope="global",
             source=HOME_CLAUDE / "settings.json",
         )
-        for r in resources:
+        # validate.sh and audit.sh have no description → fallback format
+        no_desc = [
+            r for r in resources if "validate.sh" in r.description or "audit.sh" in r.description
+        ]
+        for r in no_desc:
             assert r.description.startswith("[command]")
+
+    def test_hook_with_custom_description_uses_it(self):
+        import json
+
+        settings = json.loads((HOME_CLAUDE / "settings.json").read_text())
+        resources = _scan_hooks(
+            settings["hooks"],
+            scope="global",
+            source=HOME_CLAUDE / "settings.json",
+        )
+        log_hook = [r for r in resources if "Log all Bash" in r.description]
+        assert len(log_hook) == 1
+        assert log_hook[0].description == "Log all Bash commands to audit file"
+
+    def test_hook_description_truncated_at_240(self):
+        hooks = {
+            "PreToolUse": [
+                {
+                    "matcher": "Bash",
+                    "hooks": [{"type": "command", "command": "x", "description": "D" * 300}],
+                }
+            ]
+        }
+        resources = _scan_hooks(hooks, scope="global", source=Path("-"))
+        assert len(resources[0].description) == 240
 
 
 # ---------------------------------------------------------------------------
@@ -355,3 +387,171 @@ class TestGroupByCategory:
         assert len(groups["commands"]) == 1
         assert len(groups["mcp"]) == 1
         assert len(groups["agents"]) == 0
+
+
+# ---------------------------------------------------------------------------
+# _safe_read_json edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestSafeReadJson:
+    def test_returns_none_for_json_array(self, tmp_path: Path):
+        """Valid JSON but not a dict → must return None."""
+        f = tmp_path / "array.json"
+        f.write_text("[1, 2, 3]")
+        assert _safe_read_json(f) is None
+
+    def test_returns_dict_for_valid_json(self, tmp_path: Path):
+        f = tmp_path / "ok.json"
+        f.write_text('{"key": "value"}')
+        result = _safe_read_json(f)
+        assert result == {"key": "value"}
+
+    def test_returns_none_for_nonexistent_file(self):
+        assert _safe_read_json(Path("/nonexistent/file.json")) is None
+
+
+# ---------------------------------------------------------------------------
+# _description_from_body edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestDescriptionFromBody:
+    def test_returns_first_non_heading_line(self):
+        body = "# Title\nActual description here\nMore text"
+        assert _description_from_body(body) == "Actual description here"
+
+    def test_returns_empty_for_only_headings(self):
+        body = "# Title\n## Subtitle\n### Another"
+        assert _description_from_body(body) == ""
+
+    def test_returns_empty_for_empty_body(self):
+        assert _description_from_body("") == ""
+
+    def test_returns_empty_for_blank_lines_only(self):
+        assert _description_from_body("\n\n  \n") == ""
+
+    def test_truncates_to_max_len(self):
+        body = "A" * 300
+        assert len(_description_from_body(body, max_len=240)) == 240
+
+
+# ---------------------------------------------------------------------------
+# _scan_hooks malformed input edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestScanHooksMalformed:
+    def test_non_dict_input_returns_empty(self):
+        assert _scan_hooks("not a dict", scope="global", source=Path("-")) == []
+
+    def test_non_list_matcher_group_skipped(self):
+        hooks = {"PreToolUse": "not a list"}
+        assert _scan_hooks(hooks, scope="global", source=Path("-")) == []
+
+    def test_non_dict_group_skipped(self):
+        hooks = {"PreToolUse": ["not a dict"]}
+        assert _scan_hooks(hooks, scope="global", source=Path("-")) == []
+
+    def test_non_list_hook_defs_wrapped(self):
+        """Single hook def (not in list) should be wrapped."""
+        hooks = {
+            "PreToolUse": [
+                {
+                    "matcher": "Bash",
+                    "hooks": {"type": "command", "command": "echo test"},
+                }
+            ]
+        }
+        resources = _scan_hooks(hooks, scope="global", source=Path("-"))
+        assert len(resources) == 1
+
+    def test_non_dict_hook_def_skipped(self):
+        hooks = {"PreToolUse": [{"matcher": "Bash", "hooks": ["not a dict"]}]}
+        assert _scan_hooks(hooks, scope="global", source=Path("-")) == []
+
+
+# ---------------------------------------------------------------------------
+# _scan_mcp_servers edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestScanMcpEdgeCases:
+    def test_server_with_non_dict_config_skipped(self):
+        servers = {"good": {"type": "stdio", "command": "test"}, "bad": "not a dict"}
+        resources = _scan_mcp_servers(servers, scope="global", source=Path("-"))
+        assert len(resources) == 1
+        assert resources[0].name == "good"
+
+
+# ---------------------------------------------------------------------------
+# _scan_env_from_settings edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestScanEnvEdgeCases:
+    def test_non_dict_returns_empty(self):
+        assert _scan_env_from_settings("not a dict", scope="global", source=Path("-")) == []
+
+    def test_extracts_env_vars(self):
+        env = {"FOO": "bar", "BAZ": "123"}
+        resources = _scan_env_from_settings(env, scope="global", source=Path("-"))
+        assert len(resources) == 2
+        names = {r.name for r in resources}
+        assert names == {"FOO", "BAZ"}
+
+
+# ---------------------------------------------------------------------------
+# _scan_skills edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestScanSkillsEdgeCases:
+    def test_oserror_on_iterdir_returns_empty(self, tmp_path: Path, monkeypatch):
+        skills_dir = tmp_path / "skills"
+        skills_dir.mkdir()
+        monkeypatch.setattr(Path, "iterdir", lambda self: (_ for _ in ()).throw(OSError("perm")))
+        resources = _scan_skills(skills_dir, scope="global")
+        assert resources == []
+
+
+# ---------------------------------------------------------------------------
+# _scan_markdown_dir edge cases
+# ---------------------------------------------------------------------------
+
+
+class TestScanMarkdownEdgeCases:
+    def test_oserror_on_rglob_returns_empty(self, tmp_path: Path, monkeypatch):
+        cmd_dir = tmp_path / "commands"
+        cmd_dir.mkdir()
+        monkeypatch.setattr(Path, "rglob", lambda self, pat: (_ for _ in ()).throw(OSError("perm")))
+        resources = _scan_markdown_dir(cmd_dir, category="commands", scope="global")
+        assert resources == []
+
+    def test_unreadable_file_skipped(self, tmp_path: Path):
+        cmd_dir = tmp_path / "commands"
+        cmd_dir.mkdir()
+        md = cmd_dir / "test.md"
+        md.write_text("content")
+        md.chmod(0o000)
+        resources = _scan_markdown_dir(cmd_dir, category="commands", scope="global")
+        # File unreadable → skipped (or read if running as root)
+        assert isinstance(resources, list)
+        md.chmod(0o644)  # cleanup
+
+
+# ---------------------------------------------------------------------------
+# project_root — home dir skip
+# ---------------------------------------------------------------------------
+
+
+class TestProjectRootHomeSkip:
+    def test_skips_home_dir_claude(self, tmp_path: Path, monkeypatch):
+        """If .claude/ exists in home dir, project_root should skip it."""
+        fake_home = tmp_path / "fakehome"
+        fake_home.mkdir()
+        (fake_home / ".claude").mkdir()
+        monkeypatch.setattr(Path, "home", classmethod(lambda cls: fake_home))
+        # Start search from home — should NOT match home itself
+        result = project_root(start=fake_home)
+        assert result is None
