@@ -14,13 +14,29 @@ Interactive TUI and CLI tool to inspect all Claude Code resources: slash command
 ## Installation
 
 ```bash
-# From the repo root
+# Universal (auto-detects OS)
 ./install.sh
 
-# Or manually
-pip install .
-cp slash-command/tools.md ~/.claude/commands/tools.md
+# Or platform-specific
+./install_linux.sh           # Linux
+./install_macos.sh           # macOS
+# Windows (PowerShell)
+powershell -ExecutionPolicy Bypass -File install_windows.ps1
 ```
+
+### Platform support
+
+| OS | TUI | Inline | External | Installer |
+|----|-----|--------|----------|-----------|
+| Linux | OK | OK | gnome-terminal, konsole, xfce4, xterm | `install_linux.sh` |
+| macOS | OK | OK | Terminal.app via osascript | `install_macos.sh` |
+| Windows | OK | OK | Not available | `install_windows.ps1` |
+
+### Requirements
+
+- Python 3.10+
+- `pipx` (recommended), `uv`, or `pip`
+- Claude Code installed
 
 ## Usage
 
