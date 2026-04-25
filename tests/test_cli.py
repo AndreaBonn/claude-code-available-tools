@@ -44,17 +44,21 @@ class TestShouldUseTui:
 
     def test_returns_false_on_narrow_terminal(self, monkeypatch):
         monkeypatch.setattr("sys.stdout.isatty", lambda: True)
-        monkeypatch.setattr("os.get_terminal_size", lambda: MagicMock(columns=40))
+        monkeypatch.setattr("os.get_terminal_size", lambda *a, **kw: MagicMock(columns=40))
         assert _should_use_tui() is False
 
     def test_returns_true_on_wide_tty(self, monkeypatch):
         monkeypatch.setattr("sys.stdout.isatty", lambda: True)
-        monkeypatch.setattr("os.get_terminal_size", lambda: MagicMock(columns=120))
+        monkeypatch.setattr("os.get_terminal_size", lambda *a, **kw: MagicMock(columns=120))
         assert _should_use_tui() is True
 
     def test_returns_false_on_oserror(self, monkeypatch):
         monkeypatch.setattr("sys.stdout.isatty", lambda: True)
-        monkeypatch.setattr("os.get_terminal_size", lambda: (_ for _ in ()).throw(OSError))
+
+        def _raise_os_error(*a, **kw):
+            raise OSError("no terminal")
+
+        monkeypatch.setattr("os.get_terminal_size", _raise_os_error)
         assert _should_use_tui() is False
 
 
