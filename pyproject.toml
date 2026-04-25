@@ -12,7 +12,14 @@ dependencies = [
 cctools = "cctools.cli:main"
 
 [dependency-groups]
-dev = ["pytest>=8.0", "pytest-cov", "mypy", "ruff", "pytest-asyncio"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov",
+    "mypy",
+    "ruff",
+    "pytest-asyncio",
+    "pip-audit>=2.10.0",
+]
 
 [build-system]
 requires = ["hatchling"]

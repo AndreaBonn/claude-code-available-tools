@@ -390,8 +390,8 @@ def _scan_env_from_settings(
                 name=str(key),
                 scope=scope,
                 source=source,
-                description=str(value)[:240],
-                extra={"value": value},
+                description="(set)",
+                extra={},
             )
         )
     return resources
@@ -450,8 +450,8 @@ def _scan_process_env() -> list[Resource]:
                     name=key,
                     scope="global",
                     source=sentinel,
-                    description=value[:240],
-                    extra={"value": value, "origin": "shell"},
+                    description="(set)",
+                    extra={"origin": "shell"},
                 )
             )
     return resources

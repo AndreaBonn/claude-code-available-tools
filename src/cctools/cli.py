@@ -74,9 +74,15 @@ def _launch_external(args: argparse.Namespace) -> int:
     if args.from_slash:
         cmd.append("--from-slash")
 
+    import shlex
+
     # gnome-terminal uses bash -lc "cmd" — join as single string
     if "bash" in argv_prefix and "-lc" in argv_prefix:
-        full_cmd = argv_prefix + [" ".join(cmd)]
+        full_cmd = argv_prefix + [" ".join(shlex.quote(c) for c in cmd)]
+    # osascript: build a single shell-escaped command string to prevent
+    # AppleScript injection if args.filter contains special characters
+    elif "osascript" in argv_prefix:
+        full_cmd = argv_prefix + [" ".join(shlex.quote(c) for c in cmd)]
     else:
         full_cmd = argv_prefix + cmd
 
