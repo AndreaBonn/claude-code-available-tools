@@ -12,7 +12,7 @@
 
 Per segnalare una vulnerabilità di sicurezza, usa GitHub Security Advisories:
 
-[Segnala una vulnerabilità](https://github.com/AndreaBonn/cc-available-tools/security/advisories/new)
+[Segnala una vulnerabilità](https://github.com/AndreaBonn/claude-code-available-tools/security/advisories/new)
 
 Non aprire una issue pubblica per segnalazioni di sicurezza.
 

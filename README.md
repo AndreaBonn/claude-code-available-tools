@@ -22,7 +22,7 @@ Requires Python 3.10+ and one of: pipx, uv, or pip.
 
 ```bash
 # Clone the repository
-git clone https://github.com/AndreaBonn/cc-available-tools.git
+git clone https://github.com/AndreaBonn/claude-code-available-tools.git
 cd cc-available-tools
 
 # Run the universal installer (auto-detects OS)

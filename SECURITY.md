@@ -12,7 +12,7 @@
 
 To report a security vulnerability, use GitHub Security Advisories:
 
-[Report a vulnerability](https://github.com/AndreaBonn/cc-available-tools/security/advisories/new)
+[Report a vulnerability](https://github.com/AndreaBonn/claude-code-available-tools/security/advisories/new)
 
 Do not open a public issue for security reports.
 
