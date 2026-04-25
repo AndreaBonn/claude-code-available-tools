@@ -98,6 +98,27 @@ From within a Claude Code session:
 
 The only optional environment variable is `CLAUDE_CONFIG_DIR`, which overrides the default `~/.claude/` config directory. The scanner also detects `CLAUDE_*` and `ANTHROPIC_*` variables from the shell environment.
 
+### Custom hook descriptions
+
+Claude Code hooks don't natively include a display description. You can add an optional `description` field to any hook definition, and `cctools` will use it as the display text instead of the raw command:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "./scripts/validate.sh",
+        "description": "Validate input before Bash execution"
+      }]
+    }]
+  }
+}
+```
+
+Without `description`, cctools shows `[command] ./scripts/validate.sh`. With it, the human-readable text is displayed instead.
+
 ## Testing
 
 ```bash

@@ -98,6 +98,27 @@ Dall'interno di una sessione Claude Code:
 
 L'unica variabile d'ambiente opzionale è `CLAUDE_CONFIG_DIR`, che sovrascrive la directory di configurazione predefinita `~/.claude/`. Lo scanner rileva anche le variabili `CLAUDE_*` e `ANTHROPIC_*` dall'ambiente shell.
 
+### Descrizioni custom per gli hook
+
+Gli hook di Claude Code non includono nativamente una descrizione leggibile. È possibile aggiungere un campo opzionale `description` a qualsiasi definizione di hook, e `cctools` lo utilizzerà come testo di visualizzazione al posto del comando grezzo:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "./scripts/validate.sh",
+        "description": "Valida l'input prima dell'esecuzione Bash"
+      }]
+    }]
+  }
+}
+```
+
+Senza `description`, cctools mostra `[command] ./scripts/validate.sh`. Con il campo presente, viene visualizzato il testo leggibile.
+
 ## Test
 
 ```bash
