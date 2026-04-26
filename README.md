@@ -11,6 +11,8 @@ Interactive explorer for Claude Code tools and configuration. Scans and displays
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Security Policy](https://img.shields.io/badge/Security-Policy-blueviolet.svg)](SECURITY.md)
 
+![cctools TUI overview](assets/cc-tools-home.png)
+
 ## Features
 
 - Three display modes: full-screen TUI (Textual), inline text report (Rich), and external terminal window
@@ -20,6 +22,19 @@ Interactive explorer for Claude Code tools and configuration. Scans and displays
 - Minimal YAML frontmatter parser with no external YAML dependency
 - Cross-platform: Linux, macOS, Windows
 - Integrates as `/tools` slash command inside Claude Code sessions
+
+<details>
+<summary>Screenshots</summary>
+
+| Slash Commands | Subagents |
+|:-:|:-:|
+| ![Slash Commands](assets/cc-tools-commands.png) | ![Subagents](assets/cc-tools-subagents.png) |
+
+| Skills | MCP Servers |
+|:-:|:-:|
+| ![Skills](assets/cc-tools-skills.png) | ![MCP Servers](assets/cc-tools-mcp.png) |
+
+</details>
 
 ## Installation
 
@@ -123,6 +138,8 @@ Claude Code hooks don't natively include a display description. You can add an o
 ```
 
 Without `description`, cctools shows `[command] ./scripts/validate.sh`. With it, the human-readable text is displayed instead.
+
+![Hooks and MCP Servers view](assets/cc-tools-hooks.png)
 
 ### Custom MCP server descriptions
 
