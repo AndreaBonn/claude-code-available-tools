@@ -321,13 +321,14 @@ def _scan_mcp_servers(
         extra: dict[str, object] = dict(cfg)
         if location:
             extra["location"] = location
+        desc = cfg.get("description", "") if isinstance(cfg.get("description"), str) else ""
         resources.append(
             Resource(
                 category="mcp",
                 name=str(name),
                 scope=scope,
                 source=source,
-                description=_mcp_description(cfg),
+                description=desc[:240] if desc else _mcp_description(cfg),
                 extra=extra,
             )
         )

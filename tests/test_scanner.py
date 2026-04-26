@@ -486,6 +486,34 @@ class TestScanMcpEdgeCases:
         assert len(resources) == 1
         assert resources[0].name == "good"
 
+    def test_custom_description_used_when_present(self):
+        servers = {
+            "my-server": {
+                "type": "stdio",
+                "command": "npx",
+                "args": ["@mcp/server"],
+                "description": "My custom MCP server description",
+            }
+        }
+        resources = _scan_mcp_servers(servers, scope="global", source=Path("-"))
+        assert resources[0].description == "My custom MCP server description"
+
+    def test_fallback_description_without_custom(self):
+        servers = {"plain": {"type": "stdio", "command": "npx", "args": ["@mcp/server"]}}
+        resources = _scan_mcp_servers(servers, scope="global", source=Path("-"))
+        assert "[stdio]" in resources[0].description
+        assert "npx" in resources[0].description
+
+    def test_non_string_description_ignored(self):
+        servers = {"bad-desc": {"type": "stdio", "command": "test", "description": 42}}
+        resources = _scan_mcp_servers(servers, scope="global", source=Path("-"))
+        assert "[stdio]" in resources[0].description
+
+    def test_custom_description_truncated_at_240(self):
+        servers = {"long": {"type": "stdio", "command": "x", "description": "D" * 300}}
+        resources = _scan_mcp_servers(servers, scope="global", source=Path("-"))
+        assert len(resources[0].description) == 240
+
 
 # ---------------------------------------------------------------------------
 # _scan_env_from_settings edge cases

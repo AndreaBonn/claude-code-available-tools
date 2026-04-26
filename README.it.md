@@ -124,6 +124,25 @@ Gli hook di Claude Code non includono nativamente una descrizione leggibile. È 
 
 Senza `description`, cctools mostra `[command] ./scripts/validate.sh`. Con il campo presente, viene visualizzato il testo leggibile.
 
+### Descrizioni custom per i server MCP
+
+Allo stesso modo, le definizioni dei server MCP non includono una descrizione leggibile. È possibile aggiungere un campo opzionale `description` a qualsiasi server:
+
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@mcp/my-server"],
+      "description": "Knowledge base e ricerca del progetto"
+    }
+  }
+}
+```
+
+Senza `description`, cctools mostra `[stdio] npx @mcp/my-server`. Con il campo presente, viene visualizzato il testo leggibile. Claude Code ignora i campi sconosciuti, quindi il funzionamento MCP non viene alterato.
+
 ## Test
 
 ```bash

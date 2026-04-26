@@ -124,6 +124,25 @@ Claude Code hooks don't natively include a display description. You can add an o
 
 Without `description`, cctools shows `[command] ./scripts/validate.sh`. With it, the human-readable text is displayed instead.
 
+### Custom MCP server descriptions
+
+Similarly, MCP server entries don't include a display description. You can add an optional `description` field to any server definition:
+
+```json
+{
+  "mcpServers": {
+    "my-server": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@mcp/my-server"],
+      "description": "Project knowledge base and search"
+    }
+  }
+}
+```
+
+Without `description`, cctools shows `[stdio] npx @mcp/my-server`. With it, the human-readable text is displayed instead. Claude Code ignores unknown fields, so this does not affect MCP functionality.
+
 ## Testing
 
 ```bash
