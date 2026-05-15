@@ -36,6 +36,49 @@ Explorer interattivo per i tool e la configurazione di Claude Code. Scansiona e 
 
 </details>
 
+## Architettura
+
+```mermaid
+%%{init: {'theme': 'default'}}%%
+graph LR
+    classDef core fill:#2563eb,stroke:#1d4ed8,color:#fff
+    classDef engine fill:#059669,stroke:#047857,color:#fff
+    classDef data fill:#d97706,stroke:#b45309,color:#fff
+    classDef ext fill:#6b7280,stroke:#4b5563,color:#fff
+
+    cli["cli.py<br/>Punto di ingresso"]:::core
+
+    subgraph display["Backend di visualizzazione"]
+        direction TB
+        tui["tui.py<br/>TUI Textual"]:::core
+        inline_mod["inline.py<br/>Report Rich"]:::core
+    end
+
+    terminal["terminal.py<br/>Rilevamento terminale"]:::ext
+    ext_term(["Terminale esterno"]):::ext
+
+    scanner["scanner.py<br/>Motore di discovery"]:::engine
+
+    subgraph config["Sorgenti configurazione"]
+        direction TB
+        global_cfg["~/.claude/<br/>Config globale"]:::data
+        project_cfg[".claude/<br/>Config progetto"]:::data
+    end
+
+    cli --> tui
+    cli --> inline_mod
+    cli --> terminal
+    terminal -.-> ext_term
+
+    tui --> scanner
+    inline_mod --> scanner
+
+    scanner --> global_cfg
+    scanner --> project_cfg
+```
+
+Per diagrammi dettagliati (scanner discovery, CLI dispatch, pipeline CI) vedi [documentazione architettura](docs/ARCHITECTURE.it.md).
+
 ## Installazione
 
 Richiede Python 3.10+ e uno tra: pipx, uv o pip.
